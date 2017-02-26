@@ -92,9 +92,10 @@ function setupChannel(conn, options, jobs) {
       // create a method that accepts the job name and the message data and publishes it to the appropriate queue
       sails.createJob = (queueName, payload, options) => {
         options = Object.assign({
-          persistent: true
+          persistent: true,
+          contentType:'application/json'
         }, options)
-        sails.rabbitworker.channel.publish(exchangeName, queueName, new Buffer(payload), options)
+        sails.rabbitworker.channel.publish(exchangeName, queueName, new Buffer(JSON.stringify(payload)), options)
       }
 
       // only worry about registering workers on sails instances that are running jobs
